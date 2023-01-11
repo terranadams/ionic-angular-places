@@ -3,17 +3,17 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { OffersPage } from './offers.page';
 
-const routes: Routes = [ // order matters, hard coded routes first. 
+const routes: Routes = [ // order matters, hard coded routes first.
   {
     path: '',
     component: OffersPage
   },
   {
-    path: 'new-offer',
+    path: 'new',
     loadChildren: () => import('./new-offer/new-offer.module').then( m => m.NewOfferPageModule)
   },
   {
-    path: 'edit-offer/:placeId',
+    path: 'edit/:placeId',
     loadChildren: () => import('./edit-offer/edit-offer.module').then( m => m.EditOfferPageModule)
   },
   {
