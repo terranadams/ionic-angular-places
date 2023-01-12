@@ -3,7 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { OffersPage } from './offers.page';
 
-const routes: Routes = [ // order matters, hard coded routes first.
+const routes: Routes = [ 
   {
     path: '',
     component: OffersPage
