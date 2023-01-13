@@ -7,16 +7,44 @@
 <ion-content>
   <ion-grid>
     <ion-row>
-      <ion-col *ngFor="let place of loadedPlaces">
+      <!-- <ion-col class="ion-text-center" *ngFor="let place of loadedPlaces"> -->
+      <ion-col class="ion-text-center">
         <ion-card>
           <ion-card-header>
-            <ion-card-title>{{place.title}}</ion-card-title>
+            <ion-card-title style="margin-bottom: -30px"
+              >{{loadedPlaces[0].title}}</ion-card-title
+            >
           </ion-card-header>
-          <ion-img style="width:300px; height:300px; margin:auto;" [src]="place.imageUrl"></ion-img>
+          <ion-img
+            style="width: 300px; height: 300px; margin: auto"
+            [src]="loadedPlaces[0].imageUrl"
+          ></ion-img>
           <ion-card-content class="ion-text-center">
-            <p>{{place.description}}</p>
+            <p>{{loadedPlaces[0].description}}</p>
           </ion-card-content>
+          <div class="ion-text-right padding">
+            <ion-button
+              fill="clear"
+              color="primary"
+              [routerLink]="['/', 'places', 'discover', loadedPlaces[0].id]"
+            >More</ion-button>
+          </div>
         </ion-card>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-list>
+          <ion-item *ngFor="let place of loadedPlaces.slice(1)">
+            <ion-thumbnail>
+              <ion-img [src]="place.imageUrl"></ion-img>
+            </ion-thumbnail>
+            <ion-label style="margin: 15px">
+              <h2>{{place.title}}</h2>
+              <p>{{place.description}}</p>
+            </ion-label>
+          </ion-item>
+        </ion-list>
       </ion-col>
     </ion-row>
   </ion-grid>
