@@ -22,12 +22,13 @@
           <ion-card-content class="ion-text-center">
             <p>{{loadedPlaces[0].description}}</p>
           </ion-card-content>
-          <div class="ion-text-right padding">
+          <div>
             <ion-button
               fill="clear"
               color="primary"
               [routerLink]="['/', 'places', 'discover', loadedPlaces[0].id]"
-            >More</ion-button>
+              >More</ion-button
+            >
           </div>
         </ion-card>
       </ion-col>
@@ -35,7 +36,11 @@
     <ion-row>
       <ion-col>
         <ion-list>
-          <ion-item *ngFor="let place of loadedPlaces.slice(1)">
+          <ion-item
+            *ngFor="let place of loadedPlaces.slice(1)"
+            [routerLink]="['/', 'places','discover', place.id]"
+            detail
+          >
             <ion-thumbnail>
               <ion-img [src]="place.imageUrl"></ion-img>
             </ion-thumbnail>
