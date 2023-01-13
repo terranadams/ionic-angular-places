@@ -7,20 +7,21 @@
 <ion-content>
   <ion-grid>
     <ion-row>
-      <!-- <ion-col class="ion-text-center" *ngFor="let place of loadedPlaces"> -->
-      <ion-col class="ion-text-center">
+      <ion-col class="ion-text-center" *ngFor="let place of loadedPlaces">
+        <!-- <ion-col class="ion-text-center"> -->
         <ion-card>
           <ion-card-header>
             <ion-card-title style="margin-bottom: -30px"
-              >{{loadedPlaces[0].title}}</ion-card-title
+              >{{place.title}}</ion-card-title
             >
+            <!-- >{{loadedPlaces[0].title}}</ion-card-title> -->
           </ion-card-header>
           <ion-img
             style="width: 300px; height: 300px; margin: auto"
-            [src]="loadedPlaces[0].imageUrl"
+            [src]="place.imageUrl"
           ></ion-img>
           <ion-card-content class="ion-text-center">
-            <p>{{loadedPlaces[0].description}}</p>
+            <p>{{place.description}}</p>
           </ion-card-content>
           <div>
             <ion-button
@@ -33,7 +34,7 @@
         </ion-card>
       </ion-col>
     </ion-row>
-    <ion-row>
+    <!-- <ion-row>
       <ion-col>
         <ion-list>
           <ion-item
@@ -51,6 +52,6 @@
           </ion-item>
         </ion-list>
       </ion-col>
-    </ion-row>
+    </ion-row> -->
   </ion-grid>
 </ion-content>
