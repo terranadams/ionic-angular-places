@@ -5,5 +5,10 @@
 </ion-header>
 
 <ion-content>
+  <!-- With wrapping the below nesting of tags, we get cool animations. This is usually within another <ion-list> tag in this case. -->
+  <ion-item>
+    <ion-label position="floating">Email</ion-label>
+    <ion-input></ion-input>
+  </ion-item>
   <ion-button style="margin: 20px" color="primary" (click)="onLogin()">Login</ion-button>
 </ion-content>
