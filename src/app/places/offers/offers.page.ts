@@ -10,6 +10,10 @@ import {Place} from '../place.model';
 export class OffersPage implements OnInit {
   offers!: Place[];
 
+  onEdit(offerId: string) {
+    console.log("Editing Item: ", offerId)
+  }
+
   constructor(private placesService: PlacesService) { }
 
   ngOnInit() {
