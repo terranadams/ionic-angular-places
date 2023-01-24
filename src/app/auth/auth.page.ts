@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { LoadingController } from '@ionic/angular';
 import { AuthService } from './auth.service';
 
 @Component({
@@ -8,18 +9,27 @@ import { AuthService } from './auth.service';
   styleUrls: ['./auth.page.scss'],
 })
 export class AuthPage implements OnInit {
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private loadingCtrl: LoadingController
+  ) {}
 
-  constructor(private authService: AuthService, private router: Router) {}
-
-  isLoading = false
+  isLoading = false;
 
   onLogin() {
-    this.isLoading = true
+    this.isLoading = true;
     this.authService.login(); // enabling this boolean in the service to true will allow the next line to work
-    setTimeout(() => {
-      this.isLoading = false
-      this.router.navigateByUrl('/places/discover');
-    }, 1500);
+    this.loadingCtrl // this loading controller is a lot more smart than just rendering a spinner based on a boolean value
+      .create({ keyboardClose: true, message: 'Logging in...' })
+      .then((loadingEl) => {
+        loadingEl.present(); // PRESENTING IT
+        setTimeout(() => { // we're faking a network request here.
+          this.isLoading = false;
+          loadingEl.dismiss() // DISMISSING IT
+          this.router.navigateByUrl('/places/discover');
+        }, 1500);
+      });
   }
 
   ngOnInit() {}
