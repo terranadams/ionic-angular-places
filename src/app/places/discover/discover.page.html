@@ -8,6 +8,10 @@
 </ion-header>
 
 <ion-content>
+  <ion-segment (ionChange)="onFilterUpdate($event)" value="all">
+    <ion-segment-button value="all">All Places</ion-segment-button>
+    <ion-segment-button value="bookable">Bookable  Places</ion-segment-button>
+  </ion-segment>
   <ion-grid>
     <ion-row>
       <ion-col class="ion-text-center" *ngFor="let place of loadedPlaces">

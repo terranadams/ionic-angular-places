@@ -9,16 +9,18 @@ import { AuthService } from './auth.service';
 })
 export class AuthPage implements OnInit {
 
+  constructor(private authService: AuthService, private router: Router) {}
 
-  constructor(private authService: AuthService, private router: Router) { }
+  isLoading = false
 
   onLogin() {
-    this.authService.login() // enabling this boolean in the service to true will allow the next line to work
-    this.router.navigateByUrl('/places/discover')
+    this.isLoading = true
+    this.authService.login(); // enabling this boolean in the service to true will allow the next line to work
+    setTimeout(() => {
+      this.isLoading = false
+      this.router.navigateByUrl('/places/discover');
+    }, 1500);
   }
 
-
-  ngOnInit() {
-  }
-
+  ngOnInit() {}
 }
