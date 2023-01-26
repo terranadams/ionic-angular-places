@@ -28,7 +28,7 @@ export class AuthPage implements OnInit {
           this.isLoading = false;
           loadingEl.dismiss() // DISMISSING IT
           this.router.navigateByUrl('/places/discover');
-        }, 1500);
+        }, 500);
       });
   }
 
