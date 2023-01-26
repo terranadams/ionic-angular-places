@@ -1,12 +1,60 @@
 <ion-header>
   <ion-toolbar>
-    <ion-buttons>
+    <ion-buttons slot="start">
       <ion-back-button defaultHref="/places/offers"></ion-back-button>
     </ion-buttons>
     <ion-title>New Offer</ion-title>
+    <ion-buttons slot="primary">
+      <ion-button (click)="onCreateOffer()">
+        <ion-icon name="checkmark" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-
+  <ion-grid>
+    <ion-row>
+      <ion-col sizeSm="6" offsetSm="3">
+        <ion-item>
+          <ion-label position="floating">Title</ion-label>
+          <ion-input type="text" autocomplete autocorrect></ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col sizeSm="6" offsetSm="3">
+        <ion-item>
+          <ion-label position="floating">Short Description</ion-label>
+          <ion-textarea rows="3"></ion-textarea>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col sizeSm="6" offsetSm="3">
+        <ion-item>
+          <ion-label position="floating">Price</ion-label>
+          <ion-input type="number"></ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col sizeMd="5" offsetMd="1">
+        <ion-item>
+          <ion-label position="stacked" style="margin-bottom: 20px"
+            >Available From</ion-label
+          >
+          <ion-datetime min="2019-01-01" max="2025-12-31"></ion-datetime>
+        </ion-item>
+      </ion-col>
+      <ion-col sizeMd="5">
+        <ion-item>
+          <ion-label position="stacked" style="margin-bottom: 20px"
+            >Available To</ion-label
+          >
+          <ion-datetime min="2019-01-01" max="2025-12-31"></ion-datetime>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>
