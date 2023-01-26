@@ -7,6 +7,7 @@
 <ion-content class="ion-padding">
   <!-- this form tag is an angular forms superpower giving us an object with properties containing this form's values -->
   <!-- using the #f local reference, and passing in this 'ngForm' value, angular gives us access to this form object through the onSubmit(f) handler referencing f.form.value -->
+  <!-- ngForm is for the forms object, ngModel is for the forms controller (validating n such) -->
   <form #f="ngForm" (ngSubmit)="onSubmit(f)">
     <ion-grid>
       <ion-row>
@@ -21,8 +22,15 @@
                 name="email"
                 required
                 email
+                #emailCtrl="ngModel"
               ></ion-input>
             </ion-item>
+            <ion-item *ngIf="!emailCtrl.valid && emailCtrl.touched" lines="none"
+              ><ion-label>
+                Should be a valid email address.
+              </ion-label>
+              <!-- this message only shows when the email input is not valid --></ion-item
+            >
             <ion-item>
               <ion-label position="floating">Password</ion-label>
               <ion-input
@@ -31,8 +39,15 @@
                 name="password"
                 required
                 minlength="6"
+                #passwordCtrl="ngModel"
               ></ion-input>
             </ion-item>
+            <ion-item *ngIf="!passwordCtrl.valid && passwordCtrl.touched" lines="none"
+              ><ion-label>
+                Should be a valid password.
+              </ion-label>
+              <!-- this message only shows when the email input is not valid --></ion-item
+            >
           </ion-list>
         </ion-col>
       </ion-row>
@@ -45,8 +60,7 @@
             expand="block"
             >Switch to Login
             <!-- the type="button" attribute here keeps the form from being submitted when this gets clicked -->
-            </ion-button
-          >
+          </ion-button>
           <ion-button
             type="submit"
             color="secondary"
