@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Authenticate</ion-title>
+    <ion-title>{{ isLogin ? 'Login' : 'Sign Up'}}</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -44,7 +44,7 @@
             </ion-item>
             <ion-item *ngIf="!passwordCtrl.valid && passwordCtrl.touched" lines="none"
               ><ion-label>
-                Should be a valid password.
+                Must have at least six characters.
               </ion-label>
               <!-- this message only shows when the email input is not valid --></ion-item
             >
@@ -58,7 +58,8 @@
             color="secondary"
             fill="outline"
             expand="block"
-            >Switch to Login
+            (click)="onSwitchAuthMode()"
+            >Switch to {{ isLogin ? 'Sign Up' : 'Login'}}
             <!-- the type="button" attribute here keeps the form from being submitted when this gets clicked -->
           </ion-button>
           <ion-button
@@ -67,6 +68,7 @@
             fill="solid"
             expand="block"
             (click)="onLogin()"
+            [disabled]="!f.valid"
             >Login</ion-button
           >
         </ion-col>

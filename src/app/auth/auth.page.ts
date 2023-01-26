@@ -17,6 +17,7 @@ export class AuthPage implements OnInit {
   ) {}
 
   isLoading = false;
+  isLogin = true
 
   onLogin() {
     this.isLoading = true;
@@ -35,6 +36,10 @@ export class AuthPage implements OnInit {
 
   onSubmit(f: NgForm) {
     console.log(f.form.value)
+  }
+
+  onSwitchAuthMode() {
+    this.isLogin = !this.isLogin
   }
 
   ngOnInit() {}
