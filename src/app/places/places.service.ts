@@ -34,7 +34,7 @@ export class PlacesService {
   }
 
   getPlace(id: any) {
-    return {...this._places.find(p => p.id === id)} // making sending a clone using the spread operator and curleys
+    return {...this._places.find(p => p.id === id)} // making and sending a clone using the spread operator and curleys
   }
 
   constructor() {}
