@@ -56,13 +56,13 @@ export class PlaceDetailPage implements OnInit {
     }).then(actionSheetEl => actionSheetEl.present())
   }
 
-  // modals and controllers for them can be confusing. 
+  // modals and controllers for them can be confusing.
   openBookingModal(mode: 'select' | 'random') { // this function will only accept either of these two specific values
     console.log(mode)
     this.modalCtrl
       .create({
         component: CreateBookingComponent,
-        componentProps: { selectedPlace: this.place },
+        componentProps: { selectedPlace: this.place, selectedMode: mode },
       }) // you can configure this by adding things to this object (like for animating and css)
       .then((modalEl) => {
         modalEl.present();
