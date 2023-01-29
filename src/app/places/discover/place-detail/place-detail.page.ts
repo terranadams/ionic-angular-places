@@ -41,11 +41,11 @@ export class PlaceDetailPage implements OnInit {
       header: 'Choose an Action',
       buttons: [
         {
-          text: 'Select Date',
+          text: 'Select Date Manually',
           handler: () => {this.openBookingModal('select')}
         },
         {
-          text: 'Random Date',
+          text: 'Get Random Dates',
           handler: () => {this.openBookingModal('random')}
         },
         {
@@ -56,7 +56,6 @@ export class PlaceDetailPage implements OnInit {
     }).then(actionSheetEl => actionSheetEl.present())
   }
 
-  // modals and controllers for them can be confusing.
   openBookingModal(mode: 'select' | 'random') { // this function will only accept either of these two specific values
     console.log(mode)
     this.modalCtrl
@@ -66,11 +65,10 @@ export class PlaceDetailPage implements OnInit {
       }) // you can configure this by adding things to this object (like for animating and css)
       .then((modalEl) => {
         modalEl.present();
-        return modalEl.onDidDismiss() // returning this allows us to chain a promise
+        return modalEl.onDidDismiss() // putting a return in this allows us to chain a promise
       })
-      .then(resultData => {
-        console.log(resultData.data, resultData.role) // this tells the console if the modal was booked or just closed
-        if (resultData.role === 'confirm') console.log('Booked :)')
+      .then(resultData => { // this doesn't get ran 'til the form is submitted, window closes, and we have our info
+        console.log(resultData.data, resultData.role)
       })
   }
 }
