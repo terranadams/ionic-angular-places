@@ -34,7 +34,7 @@ export class CreateBookingComponent implements OnInit {
       startDate: this.form.value['date-from'],
       endDate: this.form.value['date-to']
     } }, 'confirm'); // passing data and giving an ID to the modal
-    // the data gets caught in the place-detail ts file where the modal is defined
+    // the data gets caught in the place-detail ts file where the modal is declared
     // we then do whatever we want with said data
   }
 

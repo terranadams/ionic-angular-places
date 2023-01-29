@@ -1,7 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { ActionSheetController, ModalController, NavController } from '@ionic/angular';
-import { CreateBookingComponent } from 'src/app/bookings/create-booking/create-booking.component';
+import {
+  ActionSheetController,
+  ModalController,
+  NavController,
+} from '@ionic/angular';
+import { CreateBookingComponent } from 'src/app/places/discover/create-booking/create-booking.component';
 import { PlacesService } from '../../places.service';
 
 @Component({
@@ -37,27 +41,34 @@ export class PlaceDetailPage implements OnInit {
     // this.navCtrl.navigateBack('/places/discover'); // This is to get the correct page transfer animation Ionic is meant to be used for
     // this.navCtrl.pop() // This would also work, but if the app is refreshed on the details page, the "Book" button wouldn't take you
     // anywhere since the page stack is now empty. This would be the use case if it were a native mobile app, since you can't refresh the app in the same manner.
-    this.actionSheetCtrl.create({
-      header: 'Choose an Action',
-      buttons: [
-        {
-          text: 'Select Date Manually',
-          handler: () => {this.openBookingModal('select')}
-        },
-        {
-          text: 'Get Random Dates',
-          handler: () => {this.openBookingModal('random')}
-        },
-        {
-          text: 'Cancel',
-          role: 'cancel' // different roles do different things to the buttons
-        },
-      ]
-    }).then(actionSheetEl => actionSheetEl.present())
+    this.actionSheetCtrl
+      .create({
+        header: 'Choose an Action',
+        buttons: [
+          {
+            text: 'Select Date Manually',
+            handler: () => {
+              this.openBookingModal('select');
+            },
+          },
+          {
+            text: 'Get Random Dates',
+            handler: () => {
+              this.openBookingModal('random');
+            },
+          },
+          {
+            text: 'Cancel',
+            role: 'cancel', // different roles do different things to the buttons
+          },
+        ],
+      })
+      .then((actionSheetEl) => actionSheetEl.present());
   }
 
-  openBookingModal(mode: 'select' | 'random') { // this function will only accept either of these two specific values
-    console.log(mode)
+  openBookingModal(mode: 'select' | 'random') {
+    // this function will only accept either of these two specific values
+    console.log(mode);
     this.modalCtrl
       .create({
         component: CreateBookingComponent,
@@ -65,10 +76,11 @@ export class PlaceDetailPage implements OnInit {
       }) // you can configure this by adding things to this object (like for animating and css)
       .then((modalEl) => {
         modalEl.present();
-        return modalEl.onDidDismiss() // putting a return in this allows us to chain a promise
+        return modalEl.onDidDismiss(); // putting a return in this allows us to chain a promise
       })
-      .then(resultData => { // this doesn't get ran 'til the form is submitted, window closes, and we have our info
-        console.log(resultData.data, resultData.role)
-      })
+      .then((resultData) => {
+        // this doesn't get ran 'til the form is submitted, window closes, and we have our info
+        console.log(resultData.data, resultData.role);
+      });
   }
 }
