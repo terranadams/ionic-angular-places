@@ -16,23 +16,23 @@ export class NewOfferPage implements OnInit {
   ngOnInit() {
     this.form = new FormGroup({
       title: new FormControl(null, {
-        updateOn: 'blur', // when it loses focus
+        updateOn: 'change', // when it loses focus
         validators: [Validators.required], // this makes sure that the title is required
       }), // the object holds the configs for this particular control
       description: new FormControl(null, {
-        updateOn: 'blur',
+        updateOn: 'change',
         validators: [Validators.required, Validators.maxLength(180)],
       }),
       price: new FormControl(null, {
-        updateOn: 'blur',
+        updateOn: 'change',
         validators: [Validators.required, Validators.min(1)], // at least a currency unit of 1 is required
       }),
       dateFrom: new FormControl(null, {
-        updateOn: 'blur',
+        updateOn: 'change',
         validators: [Validators.required],
       }),
       dateTo: new FormControl(null, {
-        updateOn: 'blur',
+        updateOn: 'change',
         validators: [Validators.required],
       }),
     });
