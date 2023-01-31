@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import {
   ActionSheetController,
   ModalController,
   NavController,
 } from '@ionic/angular';
+import { Subscription } from 'rxjs';
 import { CreateBookingComponent } from 'src/app/places/discover/create-booking/create-booking.component';
 import { PlacesService } from '../../places.service';
 
@@ -13,8 +14,9 @@ import { PlacesService } from '../../places.service';
   templateUrl: './place-detail.page.html',
   styleUrls: ['./place-detail.page.scss'],
 })
-export class PlaceDetailPage implements OnInit {
+export class PlaceDetailPage implements OnInit, OnDestroy {
   place!: any;
+  placeSub!: Subscription
 
   constructor(
     private route: ActivatedRoute,
@@ -30,9 +32,10 @@ export class PlaceDetailPage implements OnInit {
         this.navCtrl.navigateBack('/places/offers');
         return;
       }
-      let paramPlaceID = paramMap.get('placeId')?.toString(); // trying to pass this in as a string to get the next line to work
-      this.place = this.placesService.getPlace(paramPlaceID);
-      console.log(this.place);
+      //  this.place = this.placesService.getPlace(paramMap.get('placeId')?.toString()); // old logic pre subject
+      this.placeSub = this.placesService.getPlace(paramMap.get('placeId')).subscribe(place => {
+        this.place = place
+      });
     });
   }
 
@@ -82,5 +85,9 @@ export class PlaceDetailPage implements OnInit {
         // this doesn't get ran 'til the form is submitted, window closes, and we have our info
         console.log(resultData.data, resultData.role);
       });
+  }
+
+  ngOnDestroy(): void {
+    if (this.placeSub) this.placeSub.unsubscribe()
   }
 }
