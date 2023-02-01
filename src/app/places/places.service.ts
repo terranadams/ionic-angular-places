@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, take, map } from 'rxjs';
+import { BehaviorSubject, take, map, tap, delay } from 'rxjs';
 import { AuthService } from '../auth/auth.service';
 import { Place } from './place.model';
 
@@ -50,7 +50,7 @@ export class PlacesService {
     return this.places.pipe(
       take(1),
       map((places) => {
-        return {...places. find((p) => p.id === id) };
+        return { ...places.find((p) => p.id === id) };
       })
     ); // we just want to return a single observable, which is what this gives us
   }
@@ -74,9 +74,16 @@ export class PlacesService {
     );
     // this._places.push(newPlace) // this was before our subject was added
     // the take(1) operator ensures we only get one observable, and then cancel the subscription
-    this._places.pipe(take(1)).subscribe((places) => {
-      this._places.next(places.concat(newPlace)); // this next() is how we update our state, and emit it outward
-    });
+    // since we're using a loader control, we put a return to return the full observable, and put the subscribe callback in this tap() operator
+    return this._places.pipe(
+      take(1),
+      delay(1000), // this helps us somehow, see lesson 192
+      tap((places) => {
+        setTimeout(() => {
+          this._places.next(places.concat(newPlace)); // this next() is how we update our state, and emit it outward
+        });
+      })
+    );
   }
   constructor(private authService: AuthService) {}
 }
