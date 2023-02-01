@@ -40,6 +40,8 @@ export class PlacesService {
     ),
   ]);
 
+  constructor(private authService: AuthService) {}
+
   get places() {
     // return [...this._places]; // this was before our subject was added
     return this._places.asObservable();
@@ -85,5 +87,31 @@ export class PlacesService {
       })
     );
   }
-  constructor(private authService: AuthService) {}
+
+  updatePlace(placeId: string, title: string, description: string) {
+    // we could subscribe to places here, but we want to return this subscription so
+    // we can listen to it in our edit-offer page
+    return this.places.pipe(
+      take(1),
+      delay(1000),
+      tap((places) => {
+        const updatedPlaceIndex = places.findIndex(
+          (place) => place.id === placeId
+        );
+        const updatedPlaces = [...places]; // we copy the old places to make sure we don't mutate any old state in an unwanted way
+        const oldPlace = updatedPlaces[updatedPlaceIndex];
+        updatedPlaces[updatedPlaceIndex] = new Place(
+          oldPlace.id,
+          title,
+          description,
+          oldPlace.imageUrl,
+          oldPlace.price,
+          oldPlace.availableFrom,
+          oldPlace.availableTo,
+          oldPlace.userId
+        );
+        this._places.next(updatedPlaces) // we're emitting the new list of places
+      })
+    );
+  }
 }
