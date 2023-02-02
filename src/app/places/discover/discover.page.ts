@@ -38,10 +38,10 @@ export class DiscoverPage implements OnInit, OnDestroy {
     // console.log(event.detail);
     if (event.detail.value === 'all') {
       this.relevantPlaces = this.loadedPlaces
-      this.listedLoadedPlaces = this.relevantPlaces.slice(1)
+      this.listedLoadedPlaces = this.relevantPlaces // .slice(1) // idk why he's having me add this
     } else {
       this.relevantPlaces = this.loadedPlaces.filter(place => place.userId !== this.authService.userId) // checking each place if it's got my user id
-      this.listedLoadedPlaces = this.relevantPlaces.slice(1)
+      this.listedLoadedPlaces = this.relevantPlaces // .slice(1) // idk why he's having me add this
     }
   }
 
