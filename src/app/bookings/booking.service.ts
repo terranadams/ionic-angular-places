@@ -44,5 +44,13 @@ export class BookingService {
     );
   }
 
-  cancelBooking(bookingId: string) {}
+  cancelBooking(bookingId: string) { // we copied the code from above to just get our current bookings
+    return this.bookings.pipe(
+      take(1), // just the latest state snapshot
+      delay(1000), // mock processing delay
+      tap((bookings) => {
+        this._bookings.next(bookings.filter(booking => booking.id !== bookingId));
+      })
+    );
+  }
 }
