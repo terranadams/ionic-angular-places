@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, take, map, tap, delay } from 'rxjs';
 import { AuthService } from '../auth/auth.service';
@@ -40,7 +41,7 @@ export class PlacesService {
     ),
   ]);
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, private http: HttpClient ) {}
 
   get places() {
     // return [...this._places]; // this was before our subject was added
@@ -74,18 +75,22 @@ export class PlacesService {
       dateTo,
       this.authService.userId
     );
-    // this._places.push(newPlace) // this was before our subject was added
+    return this.http.post('https://ionic-places-e1471-default-rtdb.firebaseio.com/offered-places.json', {...newPlace, id: null }) // sending a copy of newPlace, with a minor change, to the db in the offered-places folder
+    // we add the 'return' above so that other parts of the app can subscribe to this (since these are observables), to make the call happen
+    // tap() basically lets you get data from observable chain, lets you do code with it, and then forwards the original data onward to be subscribed to elsewhere (lets us 'tap' into the data)
+    .pipe(tap(resData => console.log(resData)))
+
     // the take(1) operator ensures we only get one observable, and then cancel the subscription
-    // since we're using a loader control, we put a return to return the full observable, and put the subscribe callback in this tap() operator
-    return this._places.pipe(
-      take(1),
-      delay(1000), // this helps us somehow, see lesson 192
-      tap((places) => {
-        setTimeout(() => {
-          this._places.next(places.concat(newPlace)); // this next() is how we update our state, and emit it outward
-        });
-      })
-    );
+    // since we're using a loader control, we put a 'return' to return the full observable, and put the subscribe callback in this tap() operator
+    // return this._places.pipe(
+    //   take(1),
+    //   delay(1000), // this helps us somehow, see lesson 192
+    //   tap((places) => {
+    //     setTimeout(() => {
+    //       this._places.next(places.concat(newPlace)); // this next() is how we update our state, and emit it outward
+    //     });
+    //   })
+    // );
   }
 
   updatePlace(placeId: string, title: string, description: string) {
