@@ -48,6 +48,11 @@ export class PlacesService {
     return this._places.asObservable();
   }
 
+  fetchPlaces() {
+    return this.http.get('https://ionic-places-e1471-default-rtdb.firebaseio.com/offered-places.json')
+    .pipe(tap(resData => console.log(resData)))
+  }
+
   getPlace(id: any) {
     // return {...this._places.find(p => p.id === id)} // making and sending a clone using the spread operator and curleys
     return this.places.pipe(
@@ -79,7 +84,7 @@ export class PlacesService {
     return this.http.post<{name: string}>('https://ionic-places-e1471-default-rtdb.firebaseio.com/offered-places.json', {...newPlace, id: null }) // sending a copy of newPlace, with a minor change, to the db in the offered-places folder
     // we add the 'return' above so that other parts of the app can subscribe to this (since these are observables), to make the call happen
     // tap() basically lets you get data from observable chain, lets you do code with it, and then forwards the original data onward to be subscribed to elsewhere (lets us 'tap' into the data)
-    .pipe(
+    .pipe( // pipe lets us run multiple operators on a subscription
       switchMap(resData => { // takes existing observable chain as argument, lets you return brand new observable if wanted
         generatedId = resData.name // getting this value for safe keeping
         return this.places // we're returning a completely diff observable other than our response data now
@@ -89,9 +94,7 @@ export class PlacesService {
         newPlace.id = generatedId
         this._places.next(places.concat(newPlace))
       })
-    )
-
-    // the take(1) operator ensures we only get one observable, and then cancel the subscription
+    )// the take(1) operator ensures we only get one observable, and then cancel the subscription
     // since we're using a loader control, we put a 'return' to return the full observable, and put the subscribe callback in this tap() operator
     // return this._places.pipe(
     //   take(1),
