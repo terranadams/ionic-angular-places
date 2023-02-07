@@ -4,6 +4,16 @@ import { BehaviorSubject, take, map, tap, delay, switchMap } from 'rxjs';
 import { AuthService } from '../auth/auth.service';
 import { Place } from './place.model';
 
+interface PlaceData {
+  availableFrom: string;
+  availableTo: string;
+  description: string;
+  imageUrl: string;
+  price: number;
+  title: string;
+  userId: string;
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -41,7 +51,7 @@ export class PlacesService {
     ),
   ]);
 
-  constructor(private authService: AuthService, private http: HttpClient ) {}
+  constructor(private authService: AuthService, private http: HttpClient) {}
 
   get places() {
     // return [...this._places]; // this was before our subject was added
@@ -49,8 +59,33 @@ export class PlacesService {
   }
 
   fetchPlaces() {
-    return this.http.get('https://ionic-places-e1471-default-rtdb.firebaseio.com/offered-places.json')
-    .pipe(tap(resData => console.log(resData)))
+    return this.http
+      .get<{ [key: string]: PlaceData }>(
+        'https://ionic-places-e1471-default-rtdb.firebaseio.com/offered-places.json'
+      )
+      .pipe(
+        map((resData) => {
+          // we're changing the format of the response into an array of objects instead of an object of objects (lesson 206)
+          const places = [];
+          for (const key in resData) {
+            if (resData.hasOwnProperty(key)) { // lesson 206
+              places.push(
+                new Place(
+                  key,
+                  resData[key].title,
+                  resData[key].description,
+                  resData[key].imageUrl,
+                  resData[key].price,
+                  new Date(resData[key].availableFrom),
+                  new Date(resData[key].availableTo),
+                  resData[key].userId
+                )
+              );
+            }
+          }
+          return places
+        })
+      );
   }
 
   getPlace(id: any) {
@@ -70,7 +105,7 @@ export class PlacesService {
     dateFrom: Date,
     dateTo: Date
   ) {
-    let generatedId: string
+    let generatedId: string;
     const newPlace = new Place(
       Math.random().toString(),
       title,
@@ -81,20 +116,28 @@ export class PlacesService {
       dateTo,
       this.authService.userId
     );
-    return this.http.post<{name: string}>('https://ionic-places-e1471-default-rtdb.firebaseio.com/offered-places.json', {...newPlace, id: null }) // sending a copy of newPlace, with a minor change, to the db in the offered-places folder
-    // we add the 'return' above so that other parts of the app can subscribe to this (since these are observables), to make the call happen
-    // tap() basically lets you get data from observable chain, lets you do code with it, and then forwards the original data onward to be subscribed to elsewhere (lets us 'tap' into the data)
-    .pipe( // pipe lets us run multiple operators on a subscription
-      switchMap(resData => { // takes existing observable chain as argument, lets you return brand new observable if wanted
-        generatedId = resData.name // getting this value for safe keeping
-        return this.places // we're returning a completely diff observable other than our response data now
-      }),
-      take(1), // we only need the latest instance of the places observable list
-      tap(places => {
-        newPlace.id = generatedId
-        this._places.next(places.concat(newPlace))
-      })
-    )// the take(1) operator ensures we only get one observable, and then cancel the subscription
+    return (
+      this.http
+        .post<{ name: string }>(
+          'https://ionic-places-e1471-default-rtdb.firebaseio.com/offered-places.json',
+          { ...newPlace, id: null }
+        ) // sending a copy of newPlace, with a minor change, to the db in the offered-places folder
+        // we add the 'return' above so that other parts of the app can subscribe to this (since these are observables), to make the call happen
+        // tap() basically lets you get data from observable chain, lets you do code with it, and then forwards the original data onward to be subscribed to elsewhere (lets us 'tap' into the data)
+        .pipe(
+          // pipe lets us run multiple operators on a subscription
+          switchMap((resData) => {
+            // switchMap returns as new observable, map returns non-observable data that can still be used with the other pipe steps
+            generatedId = resData.name; // getting this value for safe keeping
+            return this.places; // we're returning a completely diff observable other than our response data now
+          }),
+          take(1), // we only need the latest instance of the places observable list
+          tap((places) => {
+            newPlace.id = generatedId;
+            this._places.next(places.concat(newPlace));
+          })
+        )
+    ); // the take(1) operator ensures we only get one observable, and then cancel the subscription
     // since we're using a loader control, we put a 'return' to return the full observable, and put the subscribe callback in this tap() operator
     // return this._places.pipe(
     //   take(1),
@@ -129,7 +172,7 @@ export class PlacesService {
           oldPlace.availableTo,
           oldPlace.userId
         );
-        this._places.next(updatedPlaces) // we're emitting the new list of places
+        this._places.next(updatedPlaces); // we're emitting the new list of places
       })
     );
   }

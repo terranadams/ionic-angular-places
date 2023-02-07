@@ -24,11 +24,14 @@ export class OffersPage implements OnInit, OnDestroy {
   constructor(private placesService: PlacesService, private router: Router) {}
 
   ngOnInit() {
-    this.placesService.fetchPlaces().subscribe()
     // this.offers = this.placesService.places; // old logic pre subject added
     this.placesSub = this.placesService.places.subscribe(places => {
       this.offers = places
     })
+  }
+
+  ionViewWillEnter() {// this makes it so this runs every time the component shows up, instead of when it loads for just the first time
+    this.placesService.fetchPlaces().subscribe(resData => console.log(resData))
   }
 
   ngOnDestroy(): void {
