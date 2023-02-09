@@ -60,7 +60,7 @@ export class PlacesService {
 
   fetchPlaces() {
     return this.http
-      .get<{ [key: string]: PlaceData }>(
+      .get<{ [key: string]: PlaceData }>( 
         'https://ionic-places-e1471-default-rtdb.firebaseio.com/offered-places.json'
       )
       .pipe(
