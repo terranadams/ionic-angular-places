@@ -7,7 +7,7 @@
 <ion-content class="ion-padding">
   <!-- this form tag is an angular forms superpower giving us an object with properties containing this form's values -->
   <!-- using the #f local reference, and passing in this 'ngForm' value, angular gives us access to this form object through the onSubmit(f) handler referencing f.form.value -->
-  <!-- ngForm is for the forms object, ngModel is for the forms controller (validating n such) -->
+  <!-- ngForm is for the forms object, add 'ngModel' to the tag to get value from it, ngModel is for the forms controller (validating n such) -->
   <form #f="ngForm" (ngSubmit)="onSubmit(f)">
     <ion-grid>
       <ion-row>
